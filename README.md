@@ -1,18 +1,22 @@
 # Digikala Products Crawler
 
-برای توضیحات فارسی پی دی اف در پوشه را مطالعه کنید
+در پوشه را مطالعه کنید [pdf](https://github.com/CenaAshoori/digikala_crawler/blob/main/result%20feed/97149078-%D8%AA%D9%88%D8%B6%DB%8C%D8%AD%D8%A7%D8%AA%20%D9%BE%D8%B1%D9%88%DA%98%D9%87.pdf) برای توضیحات فارسی
 
 ## Quick Start :
 ```bash
     pip install scrapy
 ```
-Then
+Then Clone
+```bash
+   git clone git@github.com:CenaAshoori/digikala_crawler.git
+```
+And Then
 ```bash
     scrapy crawl product -o result.json
 ```
-And tap Enter to set default value .
+And tap Enter to set the default value .
 
-Now in json file you can see all products that are simillar with the defualt product that i save in to the app. 
+Now in the json file you can see all products that are similar with the default product that i save that link inside the code. 
 ```json 
 [
 	{
@@ -30,7 +34,7 @@ Now in json file you can see all products that are simillar with the defualt pro
 ]
 ```
 
-Scrapy automaticly won't crawl repeated links.
+Scrapy automatically won't crawl repeated links.
 
 for getting data with 
 
@@ -52,7 +56,7 @@ for getting data with
 ```
 
 ---
-### For changing the result and crawl specefic Produc .
+### For changing the result and crawl specific Product .
 ```python 
 class ProductSpider(scrapy.Spider):
     def __init__(self):
@@ -67,13 +71,13 @@ OR
             self.start_urls.append(url)
 
 ```
-and declear the depth of search
+and declare the depth of search
 ```python 
 self.product_per_page = int (input("Enter number of product per page\n>>") or 16)
 self.depth = int(input("Enter depth of crawling \n>>") or 10)
 ```
 
-and for normalization on data we'll convert persian number to en and remove camma and we add more or use some liberary on the web .
+and for normalization on data we'll convert persian numbers to en and remove commas and we add more or use some library on the web .
 ```python 
 fa_num = {"۰": "0", "۱": "1", "۲": "2", "۳": "3", "۴": "4", "۵": "5", "۶": "6", "۷": "7", "۸": "8", "۹": "9" , ",":""}
 name = "product"
@@ -94,17 +98,17 @@ def convert_num(self, num_str):
 
 ```
 ---
-with depth variable in the method we have access to the depth of the crawling and Scrapy don't exceed that range.
+With a depth variable in the method we have access to the depth of the crawling and Scrapy doesn't exceed that range.
 ```python 
 def parse(self, response):
     depth = response.meta.get('depth')
     category = response.xpath('//*[@id="content"]/div[1]/div/article/section[1]/div[1]/div/div/div/a[2]/text()')
     name_en = response.xpath('//*[@id="content"]/div[1]/div/article/section[1]/div[2]/div[2]/span/text()')
 ```
-for having more cleaner code :D get category and name_en outside of yeild and also this feild can be blank in some products 
+for having more cleaner code :D get category and name_en outside of yield and also this field can be blank in some products 
 
 ---
-for digikala this fields have this XPATH address.
+For digikala these fields have this XPATH address.
 
 ```python 
 yield {
@@ -122,7 +126,7 @@ yield {
     }
 ```
 ---
-and with this piece of code we can understand that current depth wouldn't excced from specified depth and if it wasn't that we calculate the related products.
+and with this piece of code we can understand that current depth wouldn't exceed from specified depth and if it wasn't that we calculate the related products.
 ```python
 if depth < self.depth:
     product_links = response.xpath('//*[@id="content"]/div[1]/div/div[3]/div[2]/div/div/div//a')
@@ -141,7 +145,7 @@ if depth < self.depth:
 ```xpath 
 //*[@id="content"]/div[1]/div/div[3]/div[2]/div/div/div
 ```
-with selecting this area we have access to all product in this section but we need the `<a>` Tag of these product so if we have //a at the end of above code we have access to all of the products link.
+With selecting this area we have access to all products in this section but we need the `<a>` Tag of these products so if we have //a at the end of above code we have access to all of the products link.
 
 ```python
 product_links = response.xpath('//*[@id="content"]/div[1]/div/div[3]/div[2]/div/div/div//a')
@@ -152,5 +156,6 @@ for item in product_links:
 ```
 
 ****
+
 
 
